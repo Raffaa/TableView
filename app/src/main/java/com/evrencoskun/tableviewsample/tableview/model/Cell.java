@@ -24,6 +24,11 @@
 
 package com.evrencoskun.tableviewsample.tableview.model;
 
+import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder;
+import com.evrencoskun.tableview.filter.IFilterableModel;
+import com.evrencoskun.tableview.handler.ISelectableModel;
+import com.evrencoskun.tableview.sort.ISortableModel;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -33,14 +38,14 @@ import com.evrencoskun.tableview.sort.ISortableModel;
 /**
  * Created by evrencoskun on 11/06/2017.
  */
-
-public class Cell implements ISortableModel, IFilterableModel {
+public class Cell implements ISortableModel, IFilterableModel, ISelectableModel {
     @NonNull
     private final String mId;
     @Nullable
     private final Object mData;
     @NonNull
-    private final String mFilterKeyword;
+    private String mFilterKeyword;
+    private AbstractViewHolder.SelectionState mSelectionState = AbstractViewHolder.SelectionState.UNSELECTED;
 
     public Cell(@NonNull String id, @Nullable Object data) {
         this.mId = id;
@@ -77,5 +82,16 @@ public class Cell implements ISortableModel, IFilterableModel {
     @Override
     public String getFilterableKeyword() {
         return mFilterKeyword;
+    }
+
+    @Override
+    public AbstractViewHolder.SelectionState getSelectionState() {
+        return mSelectionState;
+    }
+
+    @NonNull
+    @Override
+    public void setSelectionState(AbstractViewHolder.SelectionState selectionState) {
+        mSelectionState = selectionState;
     }
 }
