@@ -97,7 +97,7 @@ public class MainFragment extends Fragment {
         }
 
         // Let's get TableView
-        mTableView = layout.findViewById(R.id.tableview);
+        mTableView = view.findViewById(R.id.tableview);
         mTableView.setSelectable(true);
         mTableView.getSelectionHandler().setShadowEnabled(true);
         mTableView.getSelectionHandler().setMultiSelectionEnabled(true);
