@@ -1,18 +1,25 @@
 /*
- * Copyright (c) 2018. Evren Coşkun
+ * MIT License
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Copyright (c) 2021 Evren Coşkun
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 package com.evrencoskun.tableview.adapter;
@@ -123,16 +130,27 @@ public abstract class AbstractTableAdapter<CH, RH, C> implements ITableAdapter<C
         setCellItems(cellItems);
 
         // Control corner view
-        if ((columnHeaderItems != null && !columnHeaderItems.isEmpty()) && (rowHeaderItems !=
-                null && !rowHeaderItems.isEmpty()) && (cellItems != null && !cellItems.isEmpty())
-                && mTableView != null && mCornerView == null) {
+        if (mCornerView == null){
+            if (columnHeaderItems != null && !columnHeaderItems.isEmpty() && mTableView != null) {
+                // Check to see if the corner view show be shown with column headers
+                if (!mTableView.getShowCornerView()){
+                    // Don't show corner view if there are column headers but
+                    // No row headers or cell data
+                    // (Original behaviour)
+                    if (!(rowHeaderItems != null && !rowHeaderItems.isEmpty() &&
+                            cellItems != null && !cellItems.isEmpty())) {
+                        // There are no row headers or cell items so no corner view is needed
+                        return;
+                    }
+                }
+                // Create corner view
+                mCornerView = onCreateCornerView((ViewGroup) mTableView);
 
-            // Create corner view
-            mCornerView = onCreateCornerView((ViewGroup) mTableView);
-            mTableView.addView(mCornerView, new FrameLayout.LayoutParams(mRowHeaderWidth,
-                    mColumnHeaderHeight));
-        } else if (mCornerView != null) {
-
+                // Set the corner location
+                mTableView.addView(mCornerView, new FrameLayout.LayoutParams(mRowHeaderWidth,
+                        mColumnHeaderHeight, mTableView.getGravity()));
+            }
+        } else {
             // Change corner view visibility
             if (rowHeaderItems != null && !rowHeaderItems.isEmpty()) {
                 mCornerView.setVisibility(View.VISIBLE);
@@ -142,7 +160,23 @@ public abstract class AbstractTableAdapter<CH, RH, C> implements ITableAdapter<C
         }
     }
 
+    @Override
+    public int getColumnHeaderItemViewType(int position) {
+        return 0;
+    }
+
+    @Override
+    public int getRowHeaderItemViewType(int position) {
+        return 0;
+    }
+
+    @Override
+    public int getCellItemViewType(int position) {
+        return 0;
+    }
+
     @Nullable
+    @Override
     public View getCornerView() {
         return mCornerView;
     }
@@ -340,6 +374,7 @@ public abstract class AbstractTableAdapter<CH, RH, C> implements ITableAdapter<C
      *
      * @param listener The AdapterDataSetChangedListener listener.
      */
+    @Override
     public void addAdapterDataSetChangedListener(@NonNull AdapterDataSetChangedListener<CH, RH, C> listener) {
         if (dataSetChangedListeners == null) {
             dataSetChangedListeners = new ArrayList<>();
