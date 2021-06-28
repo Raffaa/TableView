@@ -278,6 +278,15 @@ public class SelectionHandler {
         return false;
     }
 
+    public boolean isAnyRowSelected(){
+        for( int i=0; i < mTableView.getAdapter().getRowHeaderItemCount(); i++) {
+            if(mTableView.getSelectionHandler().isRowSelected(i)){
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public void changeRowBackgroundColorBySelectionStatus(@NonNull AbstractViewHolder viewHolder,
                                                           @NonNull SelectionState selectionState) {
