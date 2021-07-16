@@ -29,6 +29,10 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by evrencoskun on 4.03.2018.
  */
@@ -39,7 +43,7 @@ public class Preferences implements Parcelable {
     public int rowPositionOffset;
     public int columnPosition;
     public int columnPositionOffset;
-    public int selectedRowPosition;
+    public ArrayList<Integer> selectedRowPosition;
     public int selectedColumnPosition;
 
     public Preferences() {
@@ -50,7 +54,11 @@ public class Preferences implements Parcelable {
         rowPositionOffset = in.readInt();
         columnPosition = in.readInt();
         columnPositionOffset = in.readInt();
-        selectedRowPosition = in.readInt();
+        int selectedRowsNumber = in.readInt();
+        selectedRowPosition = new ArrayList<>();
+        for(int i = 0;i< selectedRowsNumber; i++) {
+            selectedRowPosition.add(i);
+        }
         selectedColumnPosition = in.readInt();
     }
 
@@ -98,7 +106,8 @@ public class Preferences implements Parcelable {
         dest.writeInt(rowPositionOffset);
         dest.writeInt(columnPosition);
         dest.writeInt(columnPositionOffset);
-        dest.writeInt(selectedRowPosition);
+        dest.writeInt(selectedRowPosition.size());
+        dest.writeIntArray(Arrays.stream(selectedRowPosition.toArray(new Integer[0])).mapToInt(Integer::intValue).toArray());
         dest.writeInt(selectedColumnPosition);
     }
 }

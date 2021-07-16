@@ -30,10 +30,14 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.evrencoskun.tableview.ITableView;
+import com.evrencoskun.tableview.adapter.AbstractTableAdapter;
 import com.evrencoskun.tableview.adapter.recyclerview.CellRecyclerView;
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder;
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder.SelectionState;
 import com.evrencoskun.tableview.layoutmanager.CellLayoutManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by evrencoskun on 24/10/2017.
@@ -42,10 +46,24 @@ import com.evrencoskun.tableview.layoutmanager.CellLayoutManager;
 
 public class SelectionHandler {
 
+    public ArrayList<Integer> getSelectedRows() {
+        ArrayList<Integer> selectedRows = new ArrayList<>();
+        if(isAnyRowSelected()) {
+            AbstractTableAdapter<?,?,?> adapter = mTableView.getAdapter();
+            if(adapter != null) {
+                int itemcount = adapter.getRowHeaderItemCount(); //itemcount
+                for(int i= 0; i < itemcount; i++) {
+                    if(isRowSelected(i)) {
+                        selectedRows.add(i);
+                    }
+                }
+            }
+        }
+
+        return selectedRows;
+    }
+
     public enum SELECTION_TYPE {NONE, CELLS, ROWS, COLUMNS}
-
-    ;
-
 
     private SELECTION_TYPE selectionType = SELECTION_TYPE.NONE;
 

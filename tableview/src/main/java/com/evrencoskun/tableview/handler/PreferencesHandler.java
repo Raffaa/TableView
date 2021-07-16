@@ -51,9 +51,8 @@ public class PreferencesHandler {
         preferences.columnPositionOffset = scrollHandler.getColumnPositionOffset();
         preferences.rowPosition = scrollHandler.getRowPosition();
         preferences.rowPositionOffset = scrollHandler.getRowPositionOffset();
-        // TODO
-        //preferences.selectedColumnPosition = selectionHandler.getSelectedColumnPosition();
-        //preferences.selectedRowPosition = selectionHandler.getSelectedRowPosition();
+        //preferences.selectedColumnPosition = ; TODO: get selectec cloumns
+        preferences.selectedRowPosition = selectionHandler.getSelectedRows();
         return preferences;
     }
 
@@ -61,6 +60,8 @@ public class PreferencesHandler {
         scrollHandler.scrollToColumnPosition(preferences.columnPosition, preferences.columnPositionOffset);
         scrollHandler.scrollToRowPosition(preferences.rowPosition, preferences.rowPositionOffset);
         selectionHandler.setSelectedColumnPosition(preferences.selectedColumnPosition);
-        selectionHandler.setSelectedRowPosition(preferences.selectedRowPosition);
+        for(Integer row : preferences.selectedRowPosition) {
+            selectionHandler.setSelectedRowPosition(row);
+        }
     }
 }
