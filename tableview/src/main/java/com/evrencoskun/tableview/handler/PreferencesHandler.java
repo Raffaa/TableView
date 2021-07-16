@@ -60,8 +60,10 @@ public class PreferencesHandler {
         scrollHandler.scrollToColumnPosition(preferences.columnPosition, preferences.columnPositionOffset);
         scrollHandler.scrollToRowPosition(preferences.rowPosition, preferences.rowPositionOffset);
         selectionHandler.setSelectedColumnPosition(preferences.selectedColumnPosition);
-        for(Integer row : preferences.selectedRowPosition) {
-            selectionHandler.setSelectedRowPosition(row);
-        }
+        try {
+            for (Integer row : preferences.selectedRowPosition) {
+                selectionHandler.setSelectedRowPosition(row);
+            }
+        } catch (Exception ignored) { }
     }
 }
